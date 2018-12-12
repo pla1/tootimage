@@ -23,15 +23,16 @@ public class Main {
         Main main = new Main();
         System.out.println(new Date());
         ArrayList<String> urls = new ArrayList<>();
-        urls.add("https://mastodon.sdf.org/@andyc/101229826636296921");
+     //   urls.add("https://mastodon.sdf.org/@andyc/101229826636296921");
      //    urls.add("https://pla.social/notice/1731952");
        //    urls.add("https://mastodon.social/@pla1/100373815343386126");
 
-     //   urls.add("https://pla.social/notice/1770125");
+        urls.add("https://pla.social/notice/1770125");
         //     urls.add("https://pleroma.soykaf.com/notice/21987533");
         //      urls.add("https://pleroma.soykaf.com/notice/21948548");
         //      urls.add("https://pleroma.soykaf.com/notice/22003228");
         //     urls.add("https://pleroma.soykaf.com/notice/22005168");
+    //    urls.add("https://pleroma.pla1.net/notice/414688");
         for (String url : urls) {
             main.tootImage(url);
         }
@@ -75,7 +76,22 @@ public class Main {
         String noticeId = words[3];
         url = String.format("https://%s/api/v1/statuses/%s", hostName, noticeId);
         System.out.format("%s\n", url);
-        String output = Utils.httpGet(url);
+        String output = null;
+        try {
+            output = Utils.httpGet(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+            BufferedImage bufferedImage = Utils.drawErrorMessage(e.getLocalizedMessage());
+            try {
+                File file = File.createTempFile("error", ".png");
+                System.out.format("Error file: %s\n", file.getAbsolutePath());
+                ImageIO.write(bufferedImage, "png", file);
+                Utils.run(new String[]{"/usr/bin/xdg-open", file.getAbsolutePath()});
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return;
+        }
         System.out.format("%s\n%s\n", url, output);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Toot toot = gson.fromJson(output, Toot.class);

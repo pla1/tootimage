@@ -1,5 +1,5 @@
 # TootImage.com
-Create a PNG image from a toot for sharing to other networks or in blog posts.
+Create a PNG image from a public toot for sharing to other networks or in blog posts. Tested with Pleroma and Mastodon.
 
 Use examples:
 
