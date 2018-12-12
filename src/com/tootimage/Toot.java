@@ -3,12 +3,14 @@ package com.tootimage;
 import java.util.ArrayList;
 
 public class Toot {
+    private Account account;
+    private ArrayList<Media_attachment> media_attachments = new ArrayList<>();
     private int fave_num;
     private int repeat_num;
-    private String text;
-    private String statusnet_html;
-    private ArrayList<Attachment> attachments = new ArrayList<>();
-    private User user;
+    private int replies_count;
+    private int reblogs_count;
+    private int favourites_count;
+    private String content;
     private String created_at;
 
     public String getCreated_at() {
@@ -22,12 +24,52 @@ public class Toot {
     public Toot() {
     }
 
-    public User getUser() {
-        return user;
+    public int getFavourites_count() {
+        return favourites_count;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setFavourites_count(int favourites_count) {
+        this.favourites_count = favourites_count;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public ArrayList<Media_attachment> getMedia_attachments() {
+        return media_attachments;
+    }
+
+    public void setMedia_attachments(ArrayList<Media_attachment> media_attachments) {
+        this.media_attachments = media_attachments;
+    }
+
+    public int getReplies_count() {
+        return replies_count;
+    }
+
+    public void setReplies_count(int replies_count) {
+        this.replies_count = replies_count;
+    }
+
+    public int getReblogs_count() {
+        return reblogs_count;
+    }
+
+    public void setReblogs_count(int reblogs_count) {
+        this.reblogs_count = reblogs_count;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public int getFave_num() {
@@ -46,28 +88,5 @@ public class Toot {
         this.repeat_num = repeat_num;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getStatusnet_html() {
-        return statusnet_html;
-    }
-
-    public void setStatusnet_html(String statusnet_html) {
-        this.statusnet_html = statusnet_html;
-    }
-
-    public ArrayList<Attachment> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(ArrayList<Attachment> attachments) {
-        this.attachments = attachments;
-    }
 
 }
