@@ -39,31 +39,32 @@ public class Utils {
     }
 
     public static BufferedImage resizeImage(URL url, int widthNew, int heightNew) {
+        BufferedImage bufferedImageOriginal = getBufferdImage(url);
+        Image imageTemporary = bufferedImageOriginal.getScaledInstance(widthNew, heightNew, Image.SCALE_SMOOTH);
+        BufferedImage bufferedImageResized = new BufferedImage(widthNew, heightNew, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D g2d = bufferedImageResized.createGraphics();
+        g2d.drawImage(imageTemporary, 0, 0, null);
+        g2d.dispose();
+        return bufferedImageResized;
+    }
+
+    public static BufferedImage getBufferdImage(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            return getBufferdImage(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage getBufferdImage(URL url) {
         try {
             URLConnection urlConnection = url.openConnection();
             urlConnection.addRequestProperty("User-agent", "curl/7.58.0");
-            BufferedImage bufferedImageOriginal = ImageIO.read(urlConnection.getInputStream());
-            int widthOriginal = bufferedImageOriginal.getWidth();
-            int heightOriginal = bufferedImageOriginal.getHeight();
-            int width = widthNew;
-            int height = heightNew;
-            if (widthOriginal > widthNew) {
-                width = widthNew;
-                height = (widthNew * heightOriginal) / widthOriginal;
-            }
-            if (height > heightNew) {
-                height = heightNew;
-                width = (height * widthOriginal) / heightOriginal;
-            }
-            Image imageTemporary = bufferedImageOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            BufferedImage bufferedImageResized = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-            Graphics2D g2d = bufferedImageResized.createGraphics();
-            g2d.drawImage(imageTemporary, 0, 0, null);
-            g2d.dispose();
-            return bufferedImageResized;
+            return ImageIO.read(urlConnection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.format("Error while resizing image from URL: \"%s\" Error: %s\n", url, e.getLocalizedMessage());
             return null;
         }
     }
@@ -194,6 +195,7 @@ public class Utils {
         String text = sb.toString().trim();
         text = text.replaceAll(" +", " ");
         text = text.replaceAll("&apos;", "'");
+        text = text.replaceAll("# ", "#");
         return text;
     }
 
@@ -201,7 +203,6 @@ public class Utils {
         System.out.format("Width: %d Height: %d\n", bufferedImageSquare.getWidth(), bufferedImageSquare.getHeight());
         BufferedImage bufferedImageRounded = new BufferedImage(bufferedImageSquare.getWidth(), bufferedImageSquare.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bufferedImageRounded.createGraphics();
-       // g2d = bufferedImageRounded.createGraphics();
         g2d.setComposite(AlphaComposite.Src);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(Color.WHITE);
@@ -214,17 +215,17 @@ public class Utils {
     }
 
     public static BufferedImage drawErrorMessage(String errorMessage) {
-        BufferedImage bufferedImage =  new BufferedImage(1920, 200, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bufferedImage = new BufferedImage(1920, 200, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = bufferedImage.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         g.setColor(Color.RED);
-        g.fillRect(0,0,bufferedImage.getWidth(), bufferedImage.getHeight());
+        g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
         g.setFont(g.getFont().deriveFont(30f));
         g.setColor(Color.BLACK);
-        g.drawString(errorMessage,1,100);
+        g.drawString(errorMessage, 1, 100);
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        g.drawString(sdf.format(new Date()),1,150);
+        g.drawString(sdf.format(new Date()), 1, 150);
         return bufferedImage;
     }
 

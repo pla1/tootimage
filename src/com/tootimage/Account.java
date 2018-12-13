@@ -4,6 +4,15 @@ public class Account {
     private String avatar;
     private String avatar_static;
     private String acct;
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getAvatar() {
         return avatar;
